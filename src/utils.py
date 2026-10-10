@@ -2,6 +2,8 @@ import psutil
 import platform
 from time import time
 from math import floor
+import subprocess
+import json
 
 def get_distro():
         distro_info = platform.freedesktop_os_release()
@@ -26,3 +28,14 @@ def get_system_stats():
 
 
         return battery_percent, cpu_usage, memory_usage, uptime_str , power_plugged
+
+def get_info(command):
+    result = subprocess.run(
+        ["hyprctl", "-j", command],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    if result.returncode != 0:
+        return None
+    return json.loads(result.stdout)

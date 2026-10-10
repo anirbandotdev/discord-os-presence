@@ -3,13 +3,14 @@ from time import sleep
 from utils import (
     get_system_stats , 
     get_distro , 
-    get_os_name
+    get_os_name,
+    get_info ,
 )
 
 class DiscordRPC:
     
     def __init__(self):
-        self.client_id = "1350787737246240839" 
+        self.client_id = "1318260477817786511" 
         self.rpc = Presence(self.client_id)
     
     def connect(self):
@@ -23,10 +24,11 @@ class DiscordRPC:
         os_name = get_os_name()
         battery_percent, cpu_usage, memory_usage, uptime_str , power_plugged= get_system_stats()
         distro = get_distro()
+        window = get_info("activewindow")
         try:
             self.rpc.update(
-                state=f"</> OS: {os_name} | 💻 CPU: {cpu_usage}{" | 🐧 Distro: {}".format(distro) if distro else ""}",
-                details=f"⚡ Battery: {battery_percent}\n | 🖥 Memory: {memory_usage}",
+                    state=f"</> OS: {os_name} | 💻 CPU: {cpu_usage}{" | 🐧 Distro: {}".format(distro) if distro else ""}",
+                details=f"⚡ Battery: {battery_percent}\n | 🖥 Memory: {memory_usage} | 👾 App: {str(window.get("class")).capitalize()}",
                 large_image="arch",
                 large_text=f"Uptime : {uptime_str} | Charging : {"Off" if power_plugged == False else "On"}",
                 small_image="neovim",
